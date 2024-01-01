@@ -1,0 +1,59 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "build Expression test",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"expression.cpp",
+				"tokenize.cpp",
+				"expr_to_RPN.cpp",
+				"compute_RPN.cpp",
+				"-o",
+				"${fileDirname}/expr_test",
+				"--std=c++2a"
+			],
+			"options": {
+				"cwd": "/home/ivan/CppProjects/calc/expression"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/g++"
+		},
+		{
+			"type": "cppbuild",
+			"label": "build mathFunProvider test",
+			"command": "/usr/bin/g++",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"--std=c++2a",
+				"mathFunProvider.cpp",
+				"mftest.cpp",
+				"-I/usr/local/include/python3.12",
+				"-I/usr/local/include/python3.12", 
+				"-L/usr/local/lib/python3.12/config-3.12-x86_64-linux-gnu",
+				"-L/usr/local/lib", 
+				"-lpthread",
+				"-ldl",
+				"-lutil",
+				"-lm",
+				"-o",
+				"${cwd}/mftest"
+			],
+			"options": {
+				"cwd": "/home/ivan/CppProjects/calc/"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/g++"
+		}
+	]
+}

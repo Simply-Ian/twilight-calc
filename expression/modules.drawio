@@ -1,0 +1,59 @@
+<mxfile host="Electron" modified="2023-12-29T16:28:48.514Z" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.11 Chrome/114.0.5735.289 Electron/25.9.8 Safari/537.36" etag="dXeRu2eHlAaoImsiKK-a" version="22.1.11" type="device">
+  <diagram name="Страница — 1" id="YEJpKwhmehP0J8ZGtOa4">
+    <mxGraphModel dx="1135" dy="703" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WxScmCmsQ0TZMj7sF6Kz-1" target="WxScmCmsQ0TZMj7sF6Kz-2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="444" y="100" />
+              <mxPoint x="240" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WxScmCmsQ0TZMj7sF6Kz-1" target="WxScmCmsQ0TZMj7sF6Kz-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WxScmCmsQ0TZMj7sF6Kz-1" target="WxScmCmsQ0TZMj7sF6Kz-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="444" y="100" />
+              <mxPoint x="645" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-1" value="&lt;b&gt;expression&lt;/b&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="389" y="21" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-2" value="Разбивает строку на лексические токены&lt;br&gt;&lt;b&gt;tokenize&lt;/b&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="170" y="140" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="WxScmCmsQ0TZMj7sF6Kz-4" target="WxScmCmsQ0TZMj7sF6Kz-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-4" value="Конвертирует разбитое на токены выражение в обратную польскую запись&lt;br&gt;&lt;b&gt;expr_to_RPN&lt;/b&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="359" y="130" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-6" value="Возвращает приоритет арифметического оператора&lt;br&gt;&lt;b&gt;getPriotity&lt;/b&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="373.5" y="250" width="141" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-8" value="Вычисляет значение выражения, записанного в обратной польской нотации&lt;br&gt;&lt;b&gt;compute_RPN&lt;/b&gt;" style="html=1;whiteSpace=wrap;" vertex="1" parent="1">
+          <mxGeometry x="560" y="130" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-10" value="&lt;b&gt;Определения типов:&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="280" width="160" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-11" value="exceptions.h" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="WxScmCmsQ0TZMj7sF6Kz-10">
+          <mxGeometry y="26" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-12" value="math_fun.h" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="WxScmCmsQ0TZMj7sF6Kz-10">
+          <mxGeometry y="52" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="WxScmCmsQ0TZMj7sF6Kz-13" value="token.h" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;" vertex="1" parent="WxScmCmsQ0TZMj7sF6Kz-10">
+          <mxGeometry y="78" width="160" height="26" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
