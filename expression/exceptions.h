@@ -1,3 +1,5 @@
+#ifndef EXPR_EXCEPTIONS
+#define EXPR_EXCEPTIONS
 #include <exception>
 #include <string>
 
@@ -44,3 +46,5 @@ class notEnoughArgs: public CalcException {
             message = "Недостаточно аргументов у функции";
         };
 };
+
+#endif
