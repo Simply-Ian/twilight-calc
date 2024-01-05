@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+    {
+        "name": "Debug Model",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/model_test",
+        "args": ["\"fact.fact(5)+(-18.2)*16.426\""],
+        "stopAtEntry": false,
+        "cwd": "/home/ivan/CppProjects/calc",
+        "environment": [],
+        "externalConsole": false,
+        "MIMode": "gdb",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            },
+            {
+                "description": "Set Disassembly Flavor to Intel",
+                "text": "-gdb-set disassembly-flavor intel",
+                "ignoreFailures": true
+            }
+        ]
+    },
+        {
+            "name": "Debug MFP module",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/mfp/mftest",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "/home/ivan/CppProjects/calc",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug expression module",
+            "type": "cppdbg",
+            "request": "launch",
+            "cwd": "/home/ivan/CppProjects/calc",
+            "program": "${workspaceFolder}/expression/expr_test",
+            "MIMode": "gdb",
+            "args": ["\"pi!=e\""],
+            // "args": ["sqrt(3^2+4^2)*sin(pi/6)"],
+            // "args" : ["fact(15)/(fact(13)*2)-(10/2)"],
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+
+    ]
+}

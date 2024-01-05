@@ -95,9 +95,14 @@ std::map <std::string, mathFun> mathFunProvider::load_scripts(std::filesystem::p
         if (dir_item.path().extension() == ".py") {
             std::string module_name = dir_item.path().stem().string();
             // Найдя очередной .py-файл, импортируем его
-            PyObject* cur_module_path = PyUnicode_FromString(dir_item.path().stem().c_str());
+            std::string dir_item_path = dir_item.path().parent_path() / module_name;
+            dir_item_path = dir_item_path.substr(script_folder.string().size() + 1);
+            PyObject* cur_module_path = PyUnicode_FromString(dir_item_path.c_str());
             cur_module_path = PyUnicode_Replace(cur_module_path, PY_SLASH_STR, PY_DOT_STR, -1);
             PyObject* cur_module = PyImport_Import(cur_module_path);
+            if (!cur_module){
+                throw failToImport(dir_item_path);
+            }
 
             /* Получаем список всех имен, определенных в данном модуле и словарь, в котором эти имена соответствуют 
             функциям / классам и т. п.*/

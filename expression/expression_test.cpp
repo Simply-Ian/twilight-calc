@@ -51,9 +51,9 @@ int main(int argc, char** argv){
             print_q(raw_tokens);
             tokenq_t RPN = expr_to_RPN(raw_tokens, builtin_funs_names, {"pi", "e"});
             print_q(RPN);
-            double result = compute_RPN(RPN, builtin_funs, builtin_vars);
-            std::printf("%.6f\n", result);
-            std::cout << result << std::endl;
+            // double result = compute_RPN(RPN, builtin_funs, builtin_vars);
+            // std::printf("%.6f\n", result);
+            // std::cout << result << std::endl;
         }
         catch (const CalcException& e){
             std::cout << e.what() << std::endl;

@@ -1,4 +1,6 @@
 */__pycache__
 *pyc
-mftest
-expression/expr_test
+*/mftest
+*/expr_test
+*.o
+model_test

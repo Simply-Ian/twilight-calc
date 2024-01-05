@@ -4,7 +4,7 @@
 
 int main() {
     mathFunProvider MFP;
-    auto result = MFP.load_scripts("/home/ivan/CppProjects/calc/mfp/test_scripts");
+    auto result = MFP.load_scripts("/home/ivan/CppProjects/calc/");
     double x = result.at("first.first")({2.0});
     try {
         double y = result.at("second.second_A")({5});

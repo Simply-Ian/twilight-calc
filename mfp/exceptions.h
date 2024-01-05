@@ -17,4 +17,8 @@ class badReturnType: public invalidOperation{
     public: badReturnType(std::string m) : invalidOperation(m){}
 };
 
+class failToImport : public invalidOperation {
+    public: failToImport(std::string m) : invalidOperation(m){}
+};
+
 #endif

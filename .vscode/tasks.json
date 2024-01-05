@@ -8,12 +8,12 @@
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
-				"expression.cpp",
+				"expression_test.cpp",
 				"tokenize.cpp",
 				"expr_to_RPN.cpp",
 				"compute_RPN.cpp",
 				"-o",
-				"${fileDirname}/expr_test",
+				"/home/ivan/CppProjects/calc/expression/expr_test",
 				"--std=c++2a"
 			],
 			"options": {

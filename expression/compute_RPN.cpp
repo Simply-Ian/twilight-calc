@@ -4,7 +4,7 @@
 
 
 //! @brief Рассчитывает выражение, записанное в обратной польской записи
-double compute_RPN(tokenq_t rpn_expr, std::map<std::string, mathFun> funs, std::map<std::string, double> vars){
+double compute_RPN(tokenq_t rpn_expr, const std::map<std::string, mathFun>& funs, const std::map<std::string, double>& vars){
     std::stack<double> stack;
     Token cur_token;
     while (!rpn_expr.empty()){

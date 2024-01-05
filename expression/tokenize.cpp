@@ -2,13 +2,6 @@
 #include "token.h"
 #include "exceptions.h"
 
-/*! @brief Превращает отформатированное выражение в очередь отдельных лексических единиц -- токенов
-    Токеном могут быть скобка, число, переменная, имя функции, аргумент функции, оператор и т. п.
-    @param expr Отформатированное математическое выражение: отсутствуют пробелы, разделители разрядов внутри чисел.
-    @warning Не обращает внимания на запятые вместо точек внутри чисел. Запятая интерпретируется как разделитель аргументов 
-    внутри функции, если число является аргументом функции; иначе -- как запятая внутри дроби
-    @returns Полученную очередь токенов
-*/
 tokenq_t tokenize(std::string expr){
     // Посимвольное чтение строки
     tokenq_t result;
@@ -49,11 +42,20 @@ tokenq_t tokenize(std::string expr){
             else throw invalidChar(ch, i);
         }
         else if (ch == '.'){
-            if (cur_token_type == tokenType::NUM)
+            if (cur_token_type == tokenType::NUM || cur_token_type == tokenType::NAME)
                 cur_token += ch;
             else throw invalidChar(ch, i);
         }
-        else if (ch == '+' || ch == '*' || ch == '%' || ch == '^'){
+        else if (ch == '+' || ch == '*' || ch == '%' || ch == '^' || ch == '<' || ch == '>'){
+            new_token(tokenType::OPER, i);
+        }
+        else if (ch == '='){
+            if (cur_token == ">" || cur_token == "<" || cur_token == "=" || cur_token == "!") 
+                cur_token += ch;
+            else 
+                new_token(tokenType::OPER, i);
+        }
+        else if (ch == '!'){
             new_token(tokenType::OPER, i);
         }
         else if (ch == '-'){

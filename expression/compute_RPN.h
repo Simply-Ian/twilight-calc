@@ -6,6 +6,10 @@
 #include <map>
 
 //! @brief Рассчитывает выражение, записанное в обратной польской записи
-double compute_RPN(tokenq_t rpn_expr, std::map<std::string, mathFun> functions, std::map<std::string, double> vars);
+/// @param rpn_expr Выражение в форме обратной польской записи
+/// @param funs вектор доступных математических функций
+/// @param vars вектор доступных переменных (и констант)
+/// @throws unknownToken, notEnoughArgs
+double compute_RPN(tokenq_t rpn_expr, const std::map<std::string, mathFun>& funs, const std::map<std::string, double>& vars);
 
 #endif

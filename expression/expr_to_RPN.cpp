@@ -1,34 +1,22 @@
 #include "expr_to_RPN.h"
-#include <map>
 #include "exceptions.h"
 #include <stack>
 #include <algorithm> // Для проверки, находится ли значение в контейнере
-
-static const std::map<std::string, int> op_priorities = {
-                                    {"<", -1}, {"<=", -1}, {">", -1}, {">=", -1}, {"==", -1}, {"!=", -1},
-                                    {"+", 0}, {"-", 0},
-                                    {"*", 1}, {"/", 1}, {"%", 1}, {"//", 1},
-                                    {"^", 2}
-};
+#include <functional>
 
 //! @brief Возвращает приоритет оператора tok
 //! @param tok токен-оператор (Token::type = tokenType::OPER)
 //! @returns приоритет оператора tok
-int getPriority(Token& tok){
+int getPriority(Token& tok, std::function<bool(Token)> isFun){
     if (tok.type == tokenType::OPER && op_priorities.contains(tok.value))
         return op_priorities.at(tok.value);
+    else if (isFun(tok)) return 100;
     else {
         throw unknownToken(tok.pos);
         return -1;
     }
 }
 
-//! @brief Конвертирует очередь токенов в инфиксной нотации в обратную польскую по алгоритму сортировочной станции
-//! @param in_queue входная очередь токенов
-//! @param functions вектор имен поддерживаемых функций
-//! @param vars вектор имен существующих переменных
-//! @returns очередь токенов в порядке обратной польской записи
-//! @throws 
 tokenq_t expr_to_RPN(tokenq_t& in_queue, std::vector<std::string> functions, std::vector<std::string> vars){
     Token cur_token;
     tokenq_t out_queue;
@@ -78,10 +66,10 @@ tokenq_t expr_to_RPN(tokenq_t& in_queue, std::vector<std::string> functions, std
                 break;
             }
             case tokenType::OPER: {
-                cur_priority = getPriority(cur_token);
+                cur_priority = getPriority(cur_token, isFun);
                 while (!stack.empty() && 
                         stack.top().type == tokenType::OPER && 
-                        getPriority(stack.top()) >= cur_priority) {// Все операторы левоассоциативны
+                        (getPriority(stack.top(), isFun) >= cur_priority)) {// Все операторы левоассоциативны
                     out_queue.push(stack.top());
                     stack.pop();
                 }
@@ -98,14 +86,14 @@ tokenq_t expr_to_RPN(tokenq_t& in_queue, std::vector<std::string> functions, std
                             stack.pop();
                         }
                     }
-                    if (stack.size() > 1){
-                        stack.pop();
-                        if (isFun(stack.top())){
-                            out_queue.push(stack.top());
-                            stack.pop();
-                        }
-                    }
-                    else if (stack.size() == 1) // Цикл while гарантирует, что на вершине останется (
+                    // if (stack.size() > 1){
+                    //     stack.pop();
+                    //     if (isFun(stack.top())){
+                    //         out_queue.push(stack.top());
+                    //         stack.pop();
+                    //     }
+                    // }
+                    if (!stack.empty()) // Цикл while гарантирует, что на вершине останется (
                         stack.pop();
                     else throw noOpeningPar(last_name_pos);
                 }
