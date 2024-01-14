@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/Robotolight.ttf</file>
+        <file>fonts/Georgia_Italic.ttf</file>
+    </qresource>
+</RCC>

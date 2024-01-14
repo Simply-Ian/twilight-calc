@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>icons/tune.png</file>
+        <file>icons/icons_credits.txt</file>
+    </qresource>
+</RCC>

@@ -4,3 +4,8 @@
 */expr_test
 *.o
 model_test
+bin/*
+build/*
+.cmake
+.vscode
+*test

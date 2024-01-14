@@ -29,10 +29,20 @@ tokenq_t tokenize(std::string expr){
         }
         else if (0x30 <= ch && ch <= 0x39){
             // Символ является цифрой
-            if (cur_token_type == tokenType::NUM)
+            if (cur_token_type == tokenType::NUM || cur_token_type == tokenType::NAME)
                 cur_token += ch;
             else
                 new_token(tokenType::NUM, i);
+        }
+        else if (ch == '_'){
+            if (cur_token_type == tokenType::NUM || cur_token_type == tokenType::NAME)
+                cur_token += ch;
+            else throw invalidChar(ch, i);
+        }
+        else if (ch == '\''){
+            if (cur_token_type == tokenType::NUM)
+                cur_token += ch;
+            else throw invalidChar(ch, i);
         }
         else if (ch == ','){
             if (is_in_fun)
