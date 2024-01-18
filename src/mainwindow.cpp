@@ -5,6 +5,7 @@
 #include <QGraphicsOpacityEffect>
 #include <QFontDatabase>
 #include <QScreen>
+#include <QToolTip>
 #include <array>
 #include <map>
 #define RESIZE_RECT(a) QRect(geometry().x(), geometry().y(), a, height())
@@ -15,12 +16,13 @@ MainWindow::MainWindow(mathVM *vm, QWidget *parent):
     math_vm(vm)
 {
     auto fonts = setUpFonts();
-    QApplication::setFont (fonts.at("Roboto"));
+    QApplication::setFont (fonts["Roboto"]);
     ui->setupUi(this);
     populateKeyboard();
     setTopPanelButtonsTransparent();
-    ui->funsButton->setFont(fonts.at("Georgia"));
+    ui->funsButton->setFont(fonts["Georgia"]);
     ui->answerLabel->adjustSize ();
+    QToolTip::setFont (fonts["Tooltip"]);
     setUpAnimations ();
 
     connect(ui->backspaceButton, &QPushButton::pressed, this, [&]{
@@ -42,6 +44,7 @@ MainWindow::MainWindow(mathVM *vm, QWidget *parent):
     });
     connect(ui->expressionEdit, &QLineEdit::textEdited, this, [&] {
         math_vm->setExpression(ui->expressionEdit->text());
+        QToolTip::showText (ui->expressionEdit->pos(), "", ui->expressionEdit);
     });
     connect(ui->expressionEdit, &QLineEdit::returnPressed, this, [&] {
         findChild<QPushButton*>("eqButton")->click();
@@ -51,22 +54,25 @@ MainWindow::MainWindow(mathVM *vm, QWidget *parent):
         ui->answerLabel->setText (result);
         ui->answerLabel->adjustSize ();
     });
+    connect(math_vm.get(), &mathVM::modelExceptionEvent, this, &MainWindow::showErrorMessage);
 //    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
 }
 
 MainWindow::~MainWindow(){}
 
-std::map<QString, QFont> MainWindow::setUpFonts() {
+QMap<QString, QFont> MainWindow::setUpFonts() {
     std::array<QString, 2> res_names = {":/fonts/Georgia_Italic.ttf", ":/fonts/Robotolight.ttf"};
-    std::map<QString, QFont> ready_fonts;
+    QMap<QString, QFont> ready_fonts;
     for (QString font_name: res_names){
         int font_id = QFontDatabase::addApplicationFont(font_name);
         QString family = QFontDatabase::applicationFontFamilies(font_id).back();
         QFont font(family);
-        ready_fonts.insert({family, font});
+        ready_fonts.insert(family, font);
     }
-    ready_fonts.at("Georgia").setPointSize(16);
-    ready_fonts.at("Georgia").setItalic(true);
+    ready_fonts.insert("Tooltip", ready_fonts["Roboto"]);
+    ready_fonts["Tooltip"].setPointSize(16);
+    ready_fonts["Georgia"].setPointSize(16);
+    ready_fonts["Georgia"].setItalic(true);
     return ready_fonts;
 }
 
@@ -182,4 +188,12 @@ void MainWindow::hideFunsPanel() {
     pan_w_anim->setEndValue(0);
     pan_w_anim->setStartValue(funs_tab_w);
     funsPanelAnimGroup->start();
+}
+
+void MainWindow::showErrorMessage(const QMap<QString, QString>& error) {
+    QString tooltip_text = error["message"];
+    QLineEdit* box = ui->expressionEdit;
+    if (error.find ("pos") != error.end())
+        box->setSelection (error["pos"].toInt(), 1);
+    QToolTip::showText (geometry().topLeft() + box->pos() - QPoint(0, 50), tooltip_text, box);
 }

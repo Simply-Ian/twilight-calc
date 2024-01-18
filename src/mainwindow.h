@@ -34,11 +34,10 @@ private:
     QPushButton* newKeyboardButton(QString text, QString ch);
     void resizeEvent(QResizeEvent* event) override;
     void setTopPanelButtonsTransparent();
-    std::map<QString, QFont> setUpFonts();
+    QMap<QString, QFont> setUpFonts();
     void showFunsPanel();
     void hideFunsPanel();
     void setUpAnimations();
-
-//    QPropertyAnimation* pan_w_anim;
+    void showErrorMessage(const QMap<QString, QString>& error);
 };
 #endif // MAINWINDOW_H

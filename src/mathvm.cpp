@@ -90,7 +90,7 @@ QString mathVM::calcIt() {
         return "Error";
     }
     catch (...) {
-        m_excMap = {{"type", "unknown"}};
+        m_excMap = {{"type", "unknown"}, {"message", "При выполнении расчетов произошла неизвестная ошибка"}};
         emit modelExceptionEvent(getCurExc());
         return "Error";
     }

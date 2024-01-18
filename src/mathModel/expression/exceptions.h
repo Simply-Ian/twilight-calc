@@ -25,7 +25,6 @@ class invalidChar : public CalcException {
         invalidChar(char t, int p) : CalcException(p) {
             message = "Недопустимый символ в выражении: " + std::string(1, t);
         }
-        int pos;
 };
 
 //! @brief Означает наличие непарной закрывающей скобки в строке
