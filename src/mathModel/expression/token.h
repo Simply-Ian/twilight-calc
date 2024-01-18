@@ -9,7 +9,7 @@ struct Token{
     tokenType type;
     std::string value;
     int pos;
-    bool operator == (const Token& tok){
+	bool operator == (const Token& tok) {
         return type == tok.type && value == tok.value;
     }
 };

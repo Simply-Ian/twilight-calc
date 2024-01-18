@@ -3,6 +3,10 @@
 #include <exception>
 #include <string>
 
+class incorrectExpression : public std::exception {
+
+};
+
 //! @brief Базовый класс для всех исключений, связанных с некорректным выражением на входе
 class CalcException : public std::exception {
     protected:
@@ -29,22 +33,28 @@ class noOpeningPar: public CalcException {
     public:
         noOpeningPar(int fun_name_pos) : CalcException(fun_name_pos){
             message = "Не хватает открывающей скобки в вызове функции:";
-        };
+        }
 };
 
-//! @brief Означает наличие непарной закрывающей скобки в строке
 class unknownToken: public CalcException {
     public:
         unknownToken(int pos) : CalcException(pos){
             message = "Неизвестный токен";
-        };
+        }
 };
 
 class notEnoughArgs: public CalcException {
     public:
         notEnoughArgs(int pos) : CalcException(pos){
             message = "Недостаточно аргументов у функции";
-        };
+        }
+};
+
+class zeroDivision : public CalcException {
+    public:
+	    zeroDivision(int pos) : CalcException(pos) {
+			message = "Деление на 0 недопустимо";
+		}
 };
 
 #endif

@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QPropertyAnimation>
 #include <QParallelAnimationGroup>
+#include <memory>
+#include "mathvm.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,11 +17,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(mathVM* vm, QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    std::unique_ptr<Ui::MainWindow> ui;
+    std::unique_ptr<QParallelAnimationGroup> funsPanelAnimGroup;
+    std::unique_ptr<mathVM> math_vm;
+
+    QPropertyAnimation* pan_w_anim;
+    QPropertyAnimation* win_w_anim;
+    const int funs_tab_w = 165;
+    int screen_w;
+
     void populateKeyboard(bool phone_layout=true);
     QPushButton* newKeyboardButton(QString text, QString ch);
     void resizeEvent(QResizeEvent* event) override;
@@ -27,8 +37,8 @@ private:
     std::map<QString, QFont> setUpFonts();
     void showFunsPanel();
     void hideFunsPanel();
+    void setUpAnimations();
 
 //    QPropertyAnimation* pan_w_anim;
-    QParallelAnimationGroup* a_group;
 };
 #endif // MAINWINDOW_H
