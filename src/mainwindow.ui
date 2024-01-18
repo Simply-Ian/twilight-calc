@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>466</width>
+    <width>446</width>
     <height>627</height>
    </rect>
   </property>
@@ -26,7 +26,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">.MainWindow {
-	
+	font: 18pt;
 	background-color: rgb(245, 245, 245);
 }
 QPushButton {
@@ -97,12 +97,12 @@ QPushButton:hover:pressed {
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>377</width>
+             <width>451</width>
              <height>120</height>
             </rect>
            </property>
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+            <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -152,7 +152,7 @@ QPushButton:hover:pressed {
           <widget class="QPushButton" name="funsButton">
            <property name="geometry">
             <rect>
-             <x>325</x>
+             <x>396</x>
              <y>0</y>
              <width>50</width>
              <height>50</height>
@@ -176,9 +176,15 @@ QPushButton:hover:pressed {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="4,0,1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,0,0">
           <item>
            <widget class="QLineEdit" name="expressionEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <pointsize>26</pointsize>
@@ -225,7 +231,10 @@ QPushButton:hover:pressed {
              </font>
             </property>
             <property name="text">
-             <string>10</string>
+             <string/>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::PlainText</enum>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -277,9 +286,6 @@ QPushButton:hover:pressed {
               <width>75</width>
               <height>60</height>
              </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
             </property>
             <property name="text">
              <string>C</string>
@@ -350,6 +356,9 @@ QPushButton:hover:pressed {
           <width>0</width>
           <height>5000</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font: 11pt;</string>
         </property>
         <property name="tabPosition">
          <enum>QTabWidget::North</enum>

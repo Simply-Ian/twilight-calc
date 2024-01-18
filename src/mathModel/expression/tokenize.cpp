@@ -1,6 +1,7 @@
 #include "tokenize.h"
 #include "token.h"
 #include "exceptions.h"
+#include <clocale>
 
 tokenq_t tokenize(std::string expr){
     // Посимвольное чтение строки
@@ -10,6 +11,12 @@ tokenq_t tokenize(std::string expr){
     bool is_in_fun = false;
     std::string cur_token;
     char ch;
+	/* В разных локалях разделителем целой и дробной части числа может быть "." или ",". Функция atof,
+	   которая используется в модуле compute_RPN, в зависимости от локали игнорирует один из разделителей: например,
+	   "2.2" -> 2.0, "2,2" -> 2.2 в русской локали. Так как на вход может прийти дробное число в любом формате, при токенизации
+	   заменяем и точку, и запятую на символ, определенный в текущей локали
+	*/
+	std::string dec_point = localeconv()->decimal_point;
 
     auto new_token = [&](tokenType new_type, int pos){
         if (cur_token != "")
@@ -35,25 +42,26 @@ tokenq_t tokenize(std::string expr){
                 new_token(tokenType::NUM, i);
         }
         else if (ch == '_'){
-            if (cur_token_type == tokenType::NUM || cur_token_type == tokenType::NAME)
+			if (cur_token_type == tokenType::NAME)
                 cur_token += ch;
-            else throw invalidChar(ch, i);
+			else if (cur_token_type != tokenType::NUM) throw invalidChar(ch, i);
         }
         else if (ch == '\''){
-            if (cur_token_type == tokenType::NUM)
-                cur_token += ch;
-            else throw invalidChar(ch, i);
+			if (cur_token_type != tokenType::NUM)
+				throw invalidChar(ch, i);
         }
         else if (ch == ','){
             if (is_in_fun)
                 new_token(tokenType::ARG_COMMA, i);
             else if (cur_token_type == tokenType::NUM)
-                cur_token += ch;
+				cur_token += dec_point;
             else throw invalidChar(ch, i);
         }
         else if (ch == '.'){
-            if (cur_token_type == tokenType::NUM || cur_token_type == tokenType::NAME)
+			if (cur_token_type == tokenType::NAME)
                 cur_token += ch;
+			else if (cur_token_type == tokenType::NUM)
+				cur_token += dec_point;
             else throw invalidChar(ch, i);
         }
         else if (ch == '+' || ch == '*' || ch == '%' || ch == '^' || ch == '<' || ch == '>'){
@@ -85,6 +93,7 @@ tokenq_t tokenize(std::string expr){
             else 
                 new_token(tokenType::NAME, i);
         }
+        else if (ch == ' '); // Игнорируем пробелы
         else throw invalidChar(ch, i);
     }
     new_token(cur_token_type, expr.size() - 1); // Дописываем последний в строке токен

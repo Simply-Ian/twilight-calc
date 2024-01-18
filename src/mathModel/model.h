@@ -2,14 +2,14 @@
 #define CALC_MODEL
 #include "mfp/mathFunProvider.h"
 #include "mfp/exceptions.h"
-#include "settings.h"
+//#include "settings.h"
 #define STDFUN1(fun) {[](std::vector<double> a) -> double {return fun(a[0]);}, 1}
 #define STDFUN2(fun) {[](std::vector<double> a) -> double {return fun(a[0], a[1]);}, 2}
 
 using history_t = std::vector<std::pair<std::string, double>>;
 
 /// @brief 
-class Model {
+class mathModel {
     mathFunProvider MFP;
     std::map<std::string, double> vars = {
         {"pi", M_PI},
@@ -21,8 +21,8 @@ class Model {
         {"-", {[](std::vector<double> a) -> double {return a[0] - a[1];}, 2}},
         {"*", {[](std::vector<double> a) -> double {return a[0] * a[1];}, 2}},
         {"/", {[](std::vector<double> a) -> double {return a[0] / a[1];}, 2}},
-        {"//", {[](std::vector<double> a) -> double {return (a[0] - std::remainder(a[0], a[1])) / a[1];}, 2}},
-        {"%", STDFUN2(std::remainder)},
+		{"//", {[](std::vector<double> a) -> double {return (a[0] - std::fmod(a[0], a[1])) / a[1];}, 2}},
+		{"%", STDFUN2(std::fmod)},
         {"^", STDFUN2(std::pow)},
         {"sin", STDFUN1(std::sin)},
         {"cos", STDFUN1(std::cos)},
@@ -47,7 +47,7 @@ class Model {
 
     /// @brief Структура, хранящая настройки приложения.
     /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-    settings sets;
+//    settings sets;
 
     public:
         /// @brief Возвращает значение заданной переменной
@@ -68,7 +68,7 @@ class Model {
         /// @details Не обрабатывает присваивания
         /// @param expression Строка выражения с вычищенными пробелами и разделителями чисел
         /// @return численное значение выражения.
-        /// @throws unknownToken, notEnoughArgs, noOpeningPar, invalidChar
+		/// @throws emptyExpr, unknownToken, notEnoughArgs, noOpeningPar, invalidChar
         double calculate_expression(std::string expression);
         
         /// @brief Позволяет просмотреть историю вычислений
@@ -79,13 +79,13 @@ class Model {
         /// @brief Позволяет просмотреть текущие настройки приложения
         /// @returns Ссылку на экземпляр структуры, описывающей настройки
         /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-        const settings& get_settings() const;
+//        const settings& get_settings() const;
 
         /// @brief Сохраняет измененные пользователем настройки
         /// @param new_settings Ссылка на экземпляр структуры, описывающей настройки.
         /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-        void save_settings(const settings& new_settings);
-        Model(std::string script_folder);
+//        void save_settings(const settings& new_settings);
+        mathModel(std::string script_folder);
 };
 
 #endif

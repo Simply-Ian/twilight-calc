@@ -5,7 +5,7 @@
 #include "expression/expr_to_RPN.h"
 #include "expression/tokenize.h"
 
-Model::Model(std::string script_folder) {
+mathModel::mathModel(std::string script_folder) {
     auto external_functions = MFP.load_scripts(script_folder);
     for (auto fun_pair: external_functions) 
         funs.insert(fun_pair);
@@ -14,11 +14,11 @@ Model::Model(std::string script_folder) {
         funs_names.push_back(fun_pair.first);
 }
 
-double Model::get_var(std::string name) const {
+double mathModel::get_var(std::string name) const {
     return vars.at(name);
 }
 
-void Model::set_var(std::string name, double val) {
+void mathModel::set_var(std::string name, double val) {
     bool valid_name_flag = true;
     for (char ch : name){
         // Если символ не является латинской буквой
@@ -32,11 +32,11 @@ void Model::set_var(std::string name, double val) {
     else throw invalidVarName(name);
 }
 
-const history_t& Model::view_history() const {
+const history_t& mathModel::view_history() const {
     return history;
 }
 
-double Model::calculate_expression(std::string expression){
+double mathModel::calculate_expression(std::string expression) {
     tokenq_t raw_tokens = tokenize(expression);
     std::vector<std::string> var_names;
     for (auto var_pair: vars) var_names.push_back(var_pair.first);

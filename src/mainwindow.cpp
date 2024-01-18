@@ -7,10 +7,12 @@
 #include <QScreen>
 #include <array>
 #include <map>
+#define RESIZE_RECT(a) QRect(geometry().x(), geometry().y(), a, height())
 
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+MainWindow::MainWindow(mathVM *vm, QWidget *parent):
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    math_vm(vm)
 {
     auto fonts = setUpFonts();
     QApplication::setFont (fonts.at("Roboto"));
@@ -18,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     populateKeyboard();
     setTopPanelButtonsTransparent();
     ui->funsButton->setFont(fonts.at("Georgia"));
+    ui->answerLabel->adjustSize ();
+    setUpAnimations ();
 
     connect(ui->backspaceButton, &QPushButton::pressed, this, [&]{
         int cursor_pos = ui->expressionEdit->cursorPosition ();
@@ -26,20 +30,31 @@ MainWindow::MainWindow(QWidget *parent)
             ui->expressionEdit->setText(new_text);
         }
     });
-
     connect(ui->clearButton, &QPushButton::clicked, this, [&]{
         ui->expressionEdit->clear ();
+        ui->answerLabel->setText ("");
     });
     connect(ui->funsButton, &QPushButton::toggled, this, [&](bool checked){
-        if (checked) showFunsPanel();
+        if (checked)
+            showFunsPanel();
+        else
+            hideFunsPanel ();
     });
-    resize(size()); // Искусственно генерируем событие resizeEvent, чтобы растянуть по ширине historyWidget
+    connect(ui->expressionEdit, &QLineEdit::textEdited, this, [&] {
+        math_vm->setExpression(ui->expressionEdit->text());
+    });
+    connect(ui->expressionEdit, &QLineEdit::returnPressed, this, [&] {
+        findChild<QPushButton*>("eqButton")->click();
+    });
+    connect(findChild<QPushButton*>("eqButton"), &QPushButton::clicked, this, [&] {
+        QString result = math_vm->calcIt();
+        ui->answerLabel->setText (result);
+        ui->answerLabel->adjustSize ();
+    });
+//    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+MainWindow::~MainWindow(){}
 
 std::map<QString, QFont> MainWindow::setUpFonts() {
     std::array<QString, 2> res_names = {":/fonts/Georgia_Italic.ttf", ":/fonts/Robotolight.ttf"};
@@ -65,6 +80,27 @@ void MainWindow::setTopPanelButtonsTransparent(){
     ui->funsButton->setGraphicsEffect (effect);
 }
 
+void MainWindow::setUpAnimations() {
+    const int duration = 500;
+    pan_w_anim = new QPropertyAnimation(ui->funVarPanel, "minimumWidth");
+    QEasingCurve curve(QEasingCurve::OutCubic);
+    pan_w_anim->setDuration(duration);
+    pan_w_anim->setStartValue (0); // Нужно, чтобы корректно работало скрытие панели, где мы меняем направление анимации
+    pan_w_anim->setEndValue(funs_tab_w);
+    pan_w_anim->setEasingCurve (curve);
+
+    win_w_anim = new QPropertyAnimation((QObject*)this, "geometry");
+    win_w_anim->setDuration(duration);
+    win_w_anim->setEasingCurve (curve);
+
+    funsPanelAnimGroup = std::make_unique<QParallelAnimationGroup>();
+    funsPanelAnimGroup->addAnimation(win_w_anim);
+    funsPanelAnimGroup->addAnimation(pan_w_anim);
+
+    QScreen* screen = QApplication::primaryScreen();
+    screen_w = screen->availableSize().width();
+}
+
 void MainWindow::resizeEvent(QResizeEvent* event) {
     QMainWindow::resizeEvent(event);
 //    ui->historyWidget->resize (width(), ui->historyWidget->height ());
@@ -76,10 +112,14 @@ QPushButton* MainWindow::newKeyboardButton (QString text, QString ch) {
     QPushButton* but = new QPushButton(text);
     but->setFlat(true);
     connect(but, &QPushButton::clicked, this, std::bind([&](QString ch_){
-        this->ui->expressionEdit->setText(this->ui->expressionEdit->text() + ch_);
+        QLineEdit* box = this->ui->expressionEdit;
+        unsigned int box_cursor_pos = box->cursorPosition();
+        box->setText(box->text().insert(box_cursor_pos, ch_));
+        box->setCursorPosition (box_cursor_pos + 1);
     }, ch));
     but->setMinimumSize (75, 75);
     but->setSizePolicy (QSizePolicy::Preferred, QSizePolicy::Expanding);
+    but->setFocusPolicy(Qt::FocusPolicy::NoFocus);
     return but;
 }
 
@@ -117,6 +157,7 @@ void MainWindow::populateKeyboard(bool phone_layout) {
     ui->keyboardLayout->addWidget(plus_button, 3, 4, 2, 1);
 
     QPushButton* eq_button = new QPushButton("=");
+    eq_button->setObjectName("eqButton");
     eq_button->setMinimumHeight (150);
     eq_button->setStyleSheet("QPushButton{background-color:rgb(61, 61, 61)}"
                              "QPushButton:hover {color: rgb(52, 52, 52); background-color: rgb(164, 164, 164)}"
@@ -126,38 +167,19 @@ void MainWindow::populateKeyboard(bool phone_layout) {
 }
 
 void MainWindow::showFunsPanel() {
-    const int funs_tab_w = 165;
-    const int duration = 500;
-    QScreen* screen = QApplication::primaryScreen();
-    QPropertyAnimation* pan_w_anim = new QPropertyAnimation(ui->funVarPanel, "minimumWidth");
-    QEasingCurve curve(QEasingCurve::OutCubic);
-    pan_w_anim->setDuration(duration);
+    pan_w_anim->setStartValue(0);
     pan_w_anim->setEndValue(funs_tab_w);
-    pan_w_anim->setEasingCurve (curve);
-
-    QPropertyAnimation* win_w_anim = new QPropertyAnimation(this, "minimumWidth");
-    win_w_anim->setDuration(duration);
-    win_w_anim->setEasingCurve (curve);
-
-    a_group = new QParallelAnimationGroup();
-    const int screen_place_left = screen->availableSize().width() - (pos().x() + size().width());
+    const int screen_place_left = screen_w - (pos().x() + size().width());
     if (screen_place_left >= funs_tab_w)
-        win_w_anim->setEndValue(width() + funs_tab_w);
-
-    else {
-//        QPropertyAnimation* main_tab_w_anim = new QPropertyAnimation(ui->centralwidget, "maximumWidth");
-//        main_tab_w_anim->setDuration(duration);
-//        main_tab_w_anim->setStartValue(ui->centralwidget->maximumWidth());
-//        main_tab_w_anim->setEndValue(ui->centralwidget->width() - (funs_tab_w - screen_place_left));
-
-        win_w_anim->setEndValue(screen->availableSize().width() - pos().x());
-//        a_group->addAnimation(main_tab_w_anim);
-    }
-    a_group->addAnimation(win_w_anim);
-    a_group->addAnimation(pan_w_anim);
-    a_group->start();
+        win_w_anim->setEndValue(RESIZE_RECT(width() + funs_tab_w));
+    else
+        win_w_anim->setEndValue(RESIZE_RECT(screen_w - pos().x()));
+    funsPanelAnimGroup->start();
 }
 
 void MainWindow::hideFunsPanel() {
-
+    win_w_anim->setEndValue(RESIZE_RECT(width() - funs_tab_w));
+    pan_w_anim->setEndValue(0);
+    pan_w_anim->setStartValue(funs_tab_w);
+    funsPanelAnimGroup->start();
 }
