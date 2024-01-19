@@ -193,7 +193,16 @@ void MainWindow::hideFunsPanel() {
 void MainWindow::showErrorMessage(const QMap<QString, QString>& error) {
     QString tooltip_text = error["message"];
     QLineEdit* box = ui->expressionEdit;
-    if (error.find ("pos") != error.end())
-        box->setSelection (error["pos"].toInt(), 1);
-    QToolTip::showText (geometry().topLeft() + box->pos() - QPoint(0, 50), tooltip_text, box);
+    if (error.find ("pos") != error.end()) {
+        if (error["type"] == "unknownToken" || error["type"] == "notEnoughArgs")
+            box->setSelection (error["pos"].toInt(), error["size"].toInt());
+        else
+            box->setSelection (error["pos"].toInt(), 1);
+    }
+    QToolTip::showText (geometry().topLeft() + box->pos() - QPoint(0, 50),
+                        tooltip_text,
+                        box,
+                        geometry(),
+                        1000000
+    );
 }

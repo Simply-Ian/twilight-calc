@@ -38,10 +38,30 @@ const history_t& mathModel::view_history() const {
 
 double mathModel::calculate_expression(std::string expression) {
     tokenq_t raw_tokens = tokenize(expression);
+
+	// Обработка присваивания
+	std::string var_to_assign = "";
+	if (raw_tokens.size() >= 3) {
+		tokenq_t queue_to_examine = raw_tokens;
+		Token first = queue_to_examine.front();
+		queue_to_examine.pop();
+		Token second = queue_to_examine.front();
+		queue_to_examine.pop();
+		if (first.type == tokenType::NAME && second.value == "=") {
+			if (first.value == "pi" || first.value == "e") throw constAssign(first.value);
+			raw_tokens = queue_to_examine;
+			var_to_assign = first.value;
+		}
+	}
+
     std::vector<std::string> var_names;
     for (auto var_pair: vars) var_names.push_back(var_pair.first);
+
     tokenq_t RPN = expr_to_RPN(raw_tokens, funs_names, var_names);
     double result = compute_RPN(RPN, funs, vars);
+	if (!var_to_assign.empty())
+		vars[var_to_assign] = result;
+
     history.push_back({expression, result});
     return result;
 }

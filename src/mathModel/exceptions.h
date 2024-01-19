@@ -11,6 +11,15 @@ class invalidVarName : public std::exception {
         }
 };
 
+class constAssign : public std::exception {
+	std::string const_name;
+    public:
+	    constAssign(std::string n) : const_name(n) {}
+		const char* what() const noexcept {
+			return ("Невозможно присвоить новое значение константе: " + const_name).c_str();
+		}
+};
+
 //struct emptyExpr : public std::exception {
 //	const char* message = "Задано пустое выражение";
 //	const char* what() const noexcept {

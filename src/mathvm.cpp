@@ -38,7 +38,8 @@ QString mathVM::calcIt() {
     catch (unknownToken exc) {
         m_excMap = {{"type", "unknownToken"},
                   {"message", exc.what()},
-                  {"pos", QString::number(exc.pos, 10)}
+                  {"pos", QString::number(exc.pos, 10)},
+                  {"size", QString::number(exc.token_size, 10)}
                  };
         emit modelExceptionEvent(getCurExc());
         return "Error";
@@ -53,7 +54,8 @@ QString mathVM::calcIt() {
     catch (notEnoughArgs exc) {
         m_excMap = {{"type", "notEnoughArgs"},
                   {"message", exc.what()},
-                  {"pos", QString::number(exc.pos, 10)}
+                  {"pos", QString::number(exc.pos, 10)},
+                  {"size", QString::number(exc.token_size, 10)}
                  };
         emit modelExceptionEvent(getCurExc());
         return "Error";
@@ -86,6 +88,11 @@ QString mathVM::calcIt() {
     }
     catch (zeroDivision exc) {
         m_excMap = {{"type", "zeroDivision"}, {"message", exc.what()}, {"pos", QString::number(exc.pos, 10)}};
+        emit modelExceptionEvent(getCurExc());
+        return "Error";
+    }
+    catch (constAssign exc) {
+        m_excMap = {{"type", "constAssign"}, {"message", exc.what()}};
         emit modelExceptionEvent(getCurExc());
         return "Error";
     }

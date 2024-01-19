@@ -37,14 +37,16 @@ class noOpeningPar: public CalcException {
 
 class unknownToken: public CalcException {
     public:
-        unknownToken(int pos) : CalcException(pos){
+	    int token_size;
+		unknownToken(int pos, int ts) : CalcException(pos), token_size(ts){
             message = "Неизвестный токен";
         }
 };
 
 class notEnoughArgs: public CalcException {
     public:
-        notEnoughArgs(int pos) : CalcException(pos){
+	    int token_size;
+		notEnoughArgs(int pos, int ts) : CalcException(pos), token_size(ts){
             message = "Недостаточно аргументов у функции";
         }
 };

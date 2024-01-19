@@ -12,7 +12,7 @@ int getPriority(Token& tok, std::function<bool(Token)> isFun){
         return op_priorities.at(tok.value);
     else if (isFun(tok)) return 100;
     else {
-        throw unknownToken(tok.pos);
+		throw unknownToken(tok.pos, tok.value.size());
         return -1;
     }
 }
@@ -52,7 +52,7 @@ tokenq_t expr_to_RPN(tokenq_t& in_queue, std::vector<std::string> functions, std
                     stack.push(cur_token);
                     last_name_pos = cur_token.pos;
                 }
-                else throw unknownToken(cur_token.pos);
+				else throw unknownToken(cur_token.pos, cur_token.value.size());
                 break;
             }
             case tokenType::ARG_COMMA: {

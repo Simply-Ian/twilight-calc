@@ -319,7 +319,17 @@ QPushButton:hover:pressed {
              </size>
             </property>
             <property name="text">
-             <string>&lt;-</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../images.qrc">
+              <normaloff>:/images/icons/backspace.png</normaloff>:/images/icons/backspace.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>32</width>
+              <height>32</height>
+             </size>
             </property>
             <property name="flat">
              <bool>false</bool>

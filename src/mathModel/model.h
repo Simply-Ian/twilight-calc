@@ -2,7 +2,6 @@
 #define CALC_MODEL
 #include "mfp/mathFunProvider.h"
 #include "mfp/exceptions.h"
-//#include "settings.h"
 #define STDFUN1(fun) {[](std::vector<double> a) -> double {return fun(a[0]);}, 1}
 #define STDFUN2(fun) {[](std::vector<double> a) -> double {return fun(a[0], a[1]);}, 2}
 
@@ -33,6 +32,9 @@ class mathModel {
         {"arctg", STDFUN1(std::atan)},
         {"arcctg", {[](std::vector<double> a) -> double {return 1 / std::atan(a[0]);}, 1}},
         {"sqrt", STDFUN1(std::sqrt)},
+		{"ln", STDFUN1(std::log)},
+		{"log10", STDFUN1(std::log10)},
+		{"log", {[](std::vector<double> a) -> double {return std::log(a[1]) / std::log(a[0]);}, 2}},
         {"if", {[](std::vector<double> a) -> double {return a[0]? a[1] : a[2];}, 3}},
         {">", {[](std::vector<double> a) -> double {return a[0] > a[1];}, 2}},
         {">=", {[](std::vector<double> a) -> double {return a[0] >= a[1];}, 2}},

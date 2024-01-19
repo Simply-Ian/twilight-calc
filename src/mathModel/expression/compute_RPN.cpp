@@ -19,7 +19,7 @@ double compute_RPN(tokenq_t rpn_expr, const std::map<std::string, mathFun>& funs
                 if (vars.contains(cur_token.value)){
                     stack.push(vars.at(cur_token.value));
                 }
-                else throw unknownToken(cur_token.pos);
+				else throw unknownToken(cur_token.pos, cur_token.value.size());
                 break;
             }
             case tokenType::OPER: {
@@ -28,7 +28,7 @@ double compute_RPN(tokenq_t rpn_expr, const std::map<std::string, mathFun>& funs
                     mathFun cur_fun = funs.at(cur_token.value);
                     for (int i = 0; i < cur_fun.get_args_num(); i++){
                         if (stack.empty()){
-                            throw notEnoughArgs(cur_token.pos);
+							throw notEnoughArgs(cur_token.pos, cur_token.value.size());
                             break;
                         }
                         args.insert(args.begin(), {stack.top()});
@@ -38,7 +38,7 @@ double compute_RPN(tokenq_t rpn_expr, const std::map<std::string, mathFun>& funs
 						    throw zeroDivision(cur_token.pos);
                     stack.push(cur_fun(args));
                 }
-                else throw unknownToken(cur_token.pos);
+				else throw unknownToken(cur_token.pos, cur_token.value.size());
                 break;
             }
         }
