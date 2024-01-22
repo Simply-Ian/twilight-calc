@@ -7,6 +7,8 @@
 #include <QParallelAnimationGroup>
 #include <memory>
 #include "mathvm.h"
+#include "funsmodel.h"
+#include "varsmodel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(mathVM* vm, QWidget *parent = nullptr);
+    MainWindow(mathVM* vm, QAbstractItemModel* fm, QAbstractItemModel* varsm, QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
@@ -29,6 +31,8 @@ private:
     QPropertyAnimation* win_w_anim;
     const int funs_tab_w = 165;
     int screen_w;
+    QAbstractItemModel* funs_model;
+    QAbstractItemModel* vars_model;
 
     void populateKeyboard(bool phone_layout=true);
     QPushButton* newKeyboardButton(QString text, QString ch);

@@ -14,7 +14,7 @@ class mathVM : public QObject
     Q_OBJECT
 
 private:
-    std::unique_ptr<mathModel> model = 0;
+    std::shared_ptr<mathModel> model = 0;
 
     QString m_expression;
     QMap<QString, QString> m_excMap;
@@ -38,6 +38,9 @@ public:
 
     /// @brief Обновляет выражение и очищает словарь исключения
     void setExpression(QString new_expr);
+    const mathModel* getModelRef() const {
+        return model.get();
+    }
 signals:
     void modelExceptionEvent(const QMap<QString, QString>& arg);
 };

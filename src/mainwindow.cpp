@@ -10,10 +10,12 @@
 #include <map>
 #define RESIZE_RECT(a) QRect(geometry().x(), geometry().y(), a, height())
 
-MainWindow::MainWindow(mathVM *vm, QWidget *parent):
+MainWindow::MainWindow(mathVM *vm, QAbstractItemModel *fm, QAbstractItemModel *varsm, QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    math_vm(vm)
+    math_vm(vm),
+    funs_model(fm),
+    vars_model(varsm)
 {
     auto fonts = setUpFonts();
     QApplication::setFont (fonts["Roboto"]);
@@ -23,7 +25,9 @@ MainWindow::MainWindow(mathVM *vm, QWidget *parent):
     ui->funsButton->setFont(fonts["Georgia"]);
     ui->answerLabel->adjustSize ();
     QToolTip::setFont (fonts["Tooltip"]);
-    setUpAnimations ();
+    setUpAnimations();
+    ui->funsListView->setModel(funs_model);
+    ui->varsListView->setModel(vars_model);
 
     connect(ui->backspaceButton, &QPushButton::pressed, this, [&]{
         int cursor_pos = ui->expressionEdit->cursorPosition ();
@@ -55,6 +59,16 @@ MainWindow::MainWindow(mathVM *vm, QWidget *parent):
         ui->answerLabel->adjustSize ();
     });
     connect(math_vm.get(), &mathVM::modelExceptionEvent, this, &MainWindow::showErrorMessage);
+    connect(ui->funsListView, &QListView::clicked, this, [&](const QModelIndex& index) {
+        QString fun_name = index.model()->data(index).toString();
+        fun_name = fun_name.left(fun_name.indexOf("(") + 1);
+        ui->expressionEdit->insert(fun_name);
+    });
+    connect(ui->varsListView, &QListView::clicked, this, [&](const QModelIndex& index) {
+        QString var_name = index.model()->data(index).toString();
+        var_name = var_name.left(var_name.indexOf(":"));
+        ui->expressionEdit->insert(var_name);
+    });
 //    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
 }
 
@@ -77,11 +91,7 @@ QMap<QString, QFont> MainWindow::setUpFonts() {
 }
 
 void MainWindow::setTopPanelButtonsTransparent(){
-    QGraphicsOpacityEffect * effect = new QGraphicsOpacityEffect(ui->settingsButton);
-    effect->setOpacity(0.7);
-    ui->settingsButton->setGraphicsEffect (effect);
-
-    effect = new QGraphicsOpacityEffect(ui->funsButton);
+    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(ui->funsButton);
     effect->setOpacity(0.7);
     ui->funsButton->setGraphicsEffect (effect);
 }
@@ -108,10 +118,10 @@ void MainWindow::setUpAnimations() {
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
-    QMainWindow::resizeEvent(event);
+//    QMainWindow::resizeEvent(event);
 //    ui->historyWidget->resize (width(), ui->historyWidget->height ());
-    ui->historyListView->resize(ui->centralwidget->width(), ((QWidget*)ui->historyListView->parent())->height());
-    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
+//    ui->historyListView->resize(ui->centralwidget->width(), ((QWidget*)ui->historyListView->parent())->height());
+//    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
 }
 
 QPushButton* MainWindow::newKeyboardButton (QString text, QString ch) {

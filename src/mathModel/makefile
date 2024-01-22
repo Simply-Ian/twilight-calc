@@ -7,6 +7,9 @@ OBJ=$(SRC:.cpp=.o) $(PY_REQ_SRC:.cpp=.o)
 
 .PHONY: clean all
 
+all: $(OBJ)
+	echo ready
+
 %.o: %.cpp
 	$(CXX) $(C_FLAGS) $< $(if $(filter $(PY_REQ_SRC),$<),$(PYFLAGS)) -c -o $@
 

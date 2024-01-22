@@ -16,9 +16,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/funsmodel.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
-    src/mathvm.cpp
+    src/mathdatamodel.cpp \
+    src/mathvm.cpp \
+    src/varsmodel.cpp
 OBJECTS +=    src/mathModel/model.o \
     src/mathModel/expression/compute_RPN.o \
     src/mathModel/expression/expr_to_RPN.o \
@@ -26,8 +29,11 @@ OBJECTS +=    src/mathModel/model.o \
     src/mathModel/mfp/mathFunProvider.o
 
 HEADERS += \
+    src/funsmodel.h \
     src/mainwindow.h \
-    src/mathvm.h
+    src/mathdatamodel.h \
+    src/mathvm.h \
+    src/varsmodel.h
 
 FORMS += \
     src/mainwindow.ui
@@ -53,3 +59,6 @@ QMAKE_LFLAGS += $(shell python3-config --ldflags --embed)
 QMAKE_CXXFLAGS += $(filter-out -O3, $(shell python3-config --cflags)) \
     --std=c++2a -fdiagnostics-color=always -fPIE -fpic
 QMAKE_CXX = g++-13
+
+DISTFILES += \
+    src/mathModel/makefile

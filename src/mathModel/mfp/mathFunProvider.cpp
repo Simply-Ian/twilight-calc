@@ -78,7 +78,7 @@ std::pair<std::string, mathFun> mathFunProvider::load_new_fun(PyObject* fun, std
     char* fun_name_decoded =  PyUnicode_ToStr(fun_name);
     Py_XDECREF(fun_name);
     return {module_name + "." + fun_name_decoded,
-        mathFun(callback, args_num)};
+		mathFun(callback, args_num, "")};
 }
 
 std::map <std::string, mathFun> mathFunProvider::load_scripts(std::filesystem::path script_folder){

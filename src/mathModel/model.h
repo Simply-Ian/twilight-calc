@@ -2,8 +2,8 @@
 #define CALC_MODEL
 #include "mfp/mathFunProvider.h"
 #include "mfp/exceptions.h"
-#define STDFUN1(fun) {[](std::vector<double> a) -> double {return fun(a[0]);}, 1}
-#define STDFUN2(fun) {[](std::vector<double> a) -> double {return fun(a[0], a[1]);}, 2}
+#define STDFUN1(fun, d) {[](std::vector<double> a) -> double {return fun(a[0]);}, 1, d}
+#define STDFUN2(fun, d) {[](std::vector<double> a) -> double {return fun(a[0], a[1]);}, 2, d}
 
 using history_t = std::vector<std::pair<std::string, double>>;
 
@@ -16,32 +16,32 @@ class mathModel {
     };
     history_t history;
     std::map <std::string, mathFun> funs {
-        {"+", {[](std::vector<double> a) -> double {return a[0] + a[1];}, 2}},
-        {"-", {[](std::vector<double> a) -> double {return a[0] - a[1];}, 2}},
-        {"*", {[](std::vector<double> a) -> double {return a[0] * a[1];}, 2}},
-        {"/", {[](std::vector<double> a) -> double {return a[0] / a[1];}, 2}},
-		{"//", {[](std::vector<double> a) -> double {return (a[0] - std::fmod(a[0], a[1])) / a[1];}, 2}},
-		{"%", STDFUN2(std::fmod)},
-        {"^", STDFUN2(std::pow)},
-        {"sin", STDFUN1(std::sin)},
-        {"cos", STDFUN1(std::cos)},
-        {"tg", STDFUN1(std::tan)},
-        {"ctg", {[](std::vector<double> a) -> double {return 1 / std::tan(a[0]);}, 1}},
-        {"arcsin", STDFUN1(std::asin)},
-        {"arccos", STDFUN1(std::acos)},
-        {"arctg", STDFUN1(std::atan)},
-        {"arcctg", {[](std::vector<double> a) -> double {return 1 / std::atan(a[0]);}, 1}},
-        {"sqrt", STDFUN1(std::sqrt)},
-		{"ln", STDFUN1(std::log)},
-		{"log10", STDFUN1(std::log10)},
-		{"log", {[](std::vector<double> a) -> double {return std::log(a[1]) / std::log(a[0]);}, 2}},
-        {"if", {[](std::vector<double> a) -> double {return a[0]? a[1] : a[2];}, 3}},
-        {">", {[](std::vector<double> a) -> double {return a[0] > a[1];}, 2}},
-        {">=", {[](std::vector<double> a) -> double {return a[0] >= a[1];}, 2}},
-        {"<", {[](std::vector<double> a) -> double {return a[0] < a[1];}, 2}},
-        {"<=", {[](std::vector<double> a) -> double {return a[0] <= a[1];}, 2}},
-        {"==", {[](std::vector<double> a) -> double {return a[0] == a[1];}, 2}},
-        {"!=", {[](std::vector<double> a) -> double {return a[0] != a[1];}, 2}},
+		{"+", {[](std::vector<double> a) -> double {return a[0] + a[1];}, 2, ""}},
+		{"-", {[](std::vector<double> a) -> double {return a[0] - a[1];}, 2, ""}},
+		{"*", {[](std::vector<double> a) -> double {return a[0] * a[1];}, 2, ""}},
+		{"/", {[](std::vector<double> a) -> double {return a[0] / a[1];}, 2, ""}},
+		{"//", {[](std::vector<double> a) -> double {return (a[0] - std::fmod(a[0], a[1])) / a[1];}, 2, ""}},
+		{"%", STDFUN2(std::fmod, "")},
+		{"^", STDFUN2(std::pow, "")},
+		{">", {[](std::vector<double> a) -> double {return a[0] > a[1];}, 2, ""}},
+		{">=", {[](std::vector<double> a) -> double {return a[0] >= a[1];}, 2, ""}},
+		{"<", {[](std::vector<double> a) -> double {return a[0] < a[1];}, 2, ""}},
+		{"<=", {[](std::vector<double> a) -> double {return a[0] <= a[1];}, 2, ""}},
+		{"==", {[](std::vector<double> a) -> double {return a[0] == a[1];}, 2, ""}},
+		{"!=", {[](std::vector<double> a) -> double {return a[0] != a[1];}, 2, ""}},
+		{"sin", STDFUN1(std::sin, "Вычисляет синус угла a (рад)")},
+		{"cos", STDFUN1(std::cos, "Вычисляет косинус угла a (рад)")},
+		{"tg", STDFUN1(std::tan, "Вычисляет тангенс угла a (рад)")},
+		{"ctg", {[](std::vector<double> a) -> double {return 1 / std::tan(a[0]);}, 1, "Вычисляет тангенс угла a (рад)"}},
+		{"arcsin", STDFUN1(std::asin, "Вычисляет арксинус угла a (рад)")},
+		{"arccos", STDFUN1(std::acos, "Вычисляет арккосинус угла a (рад)")},
+		{"arctg", STDFUN1(std::atan, "Вычисляет арктангенс угла a (рад)")},
+		{"arcctg", {[](std::vector<double> a) -> double {return 1 / std::atan(a[0]);}, 1, "Вычисляет арккотангенс угла a (рад)"}},
+		{"sqrt", STDFUN1(std::sqrt, "Вычисляет квадратный корень из a")},
+		{"ln", STDFUN1(std::log, "Вычисляет натуральный логарифм от а")},
+		{"log10", STDFUN1(std::log10, "Вычисляет десятичный логарифм от а")},
+		{"log", {[](std::vector<double> a) -> double {return std::log(a[1]) / std::log(a[0]);}, 2, "Вычисляет логарифм b по основанию а"}},
+		{"if", {[](std::vector<double> a) -> double {return a[0]? a[1] : a[2];}, 3, "Возвращает c, если а равно нулю, иначе возвращает b"}}
     };
 
     /// @brief Список имен математических функций.
@@ -88,6 +88,14 @@ class mathModel {
         /// @attention Скорее всего, это поле будет перенесено в отдельную модель
 //        void save_settings(const settings& new_settings);
         mathModel(std::string script_folder);
+
+		const std::map<std::string, mathFun>& get_mathfuns_map() const {
+			return funs;
+		}
+
+		const std::map<std::string, double>& get_vars_map() const {
+			return vars;
+		}
 };
 
 #endif
