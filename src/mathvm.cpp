@@ -3,10 +3,10 @@
 #include "mathModel/expression/exceptions.h"
 #include "mathModel/mfp/exceptions.h"
 
-mathVM::mathVM(std::string scripts_folder)
+mathVM::mathVM(std::string sf) : scripts_folder(sf)
 {
     try {
-        model = std::make_unique<mathModel>(scripts_folder);
+        model = std::make_unique<mathModel>(sf);
     }
     catch(failToImport exc) {
         m_excMap = {{"type", "failToImport"}, {"message", exc.what()}};

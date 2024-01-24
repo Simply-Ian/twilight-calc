@@ -30,7 +30,6 @@ class mathFunProvider {
     /// @details Проверяет, не возникло ли Python-исключение заданного типа и, если возникло, создает C++-исключение заданного типа,
     /// передавая ему в качестве аргумента сообщение об ошиьбке в формате std::string, и выбрасывает его
     /// @param py_exc_type 
-    ///
     /// @throws C++-исключение заданного типа
     template <typename T>
     static void handle_py_exception(PyObject* py_exc_type);

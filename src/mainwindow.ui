@@ -109,7 +109,7 @@ QPushButton:hover:pressed {
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="aboutButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                <horstretch>0</horstretch>

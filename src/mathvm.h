@@ -33,7 +33,7 @@ private:
     QString stripTrailingZeroes(QString number);
 
 public:
-    mathVM(std::string scripts_folder);
+    mathVM(std::string sf);
 
     const QMap<QString, QString>& getCurExc() const{
         return m_excMap;
@@ -50,6 +50,7 @@ public:
     const mathModel* getModelRef() const {
         return model.get();
     }
+    std::string scripts_folder;
 signals:
     /// @brief Оповещает, что при вычислении выражения произошла ошибка
     void modelExceptionEvent(const QMap<QString, QString>& arg);

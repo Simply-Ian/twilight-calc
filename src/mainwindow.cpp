@@ -6,6 +6,7 @@
 #include <QFontDatabase>
 #include <QScreen>
 #include <QToolTip>
+#include <QMessageBox>
 #include <array>
 #include <map>
 #define RESIZE_RECT(a) QRect(geometry().x(), geometry().y(), a, height())
@@ -68,7 +69,12 @@ MainWindow::MainWindow(mathVM *vm, QAbstractItemModel *fm, QAbstractItemModel *v
         var_name = var_name.left(var_name.indexOf(":"));
         ui->expressionEdit->insert(var_name);
     });
-//    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
+    connect(ui->aboutButton, &QPushButton::clicked, this, [&] {
+        QString about_message = about
+                .arg(QString::number(APP_VERSION, 'f', 1))
+                .arg(QString::fromStdString(math_vm->scripts_folder));
+        QMessageBox::about (this, "Twilight Calc", about_message);
+    });
 }
 
 MainWindow::~MainWindow(){}
@@ -84,8 +90,6 @@ QMap<QString, QFont> MainWindow::setUpFonts() {
     }
     ready_fonts.insert("Tooltip", ready_fonts["Roboto"]);
     ready_fonts["Tooltip"].setPointSize(16);
-//    ready_fonts["Georgia"].setPointSize(16);
-//    ready_fonts["Georgia"].setItalic(true);
     return ready_fonts;
 }
 
