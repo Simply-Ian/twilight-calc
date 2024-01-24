@@ -102,6 +102,6 @@ tokenq_t tokenize(std::string expr){
 		else throw invalidChar(ch, i);
 		if (ch != ' ') whsp_counter = 0;
     }
-	new_token(cur_token_type, expr.size() - 1 - cur_token.size()); // Дописываем последний в строке токен
+	new_token(cur_token_type, expr.size() - cur_token.size()); // Дописываем последний в строке токен
     return result;
 }

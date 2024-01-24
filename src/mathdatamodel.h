@@ -4,7 +4,7 @@
 #include "mathModel/model.h"
 #include <QAbstractListModel>
 
-
+/// @brief Абстрактный класс. Описывает обертку над mathModel, предоставляющую доступ к ее данным в стиле QAbstractListModel
 class mathDataModel : public QAbstractListModel
 {
     Q_OBJECT

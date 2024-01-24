@@ -19,17 +19,18 @@ double mathModel::get_var(std::string name) const {
 }
 
 void mathModel::set_var(std::string name, double val) {
-    bool valid_name_flag = true;
     for (char ch : name){
         // Если символ не является латинской буквой
         if (!((0x41 <= ch && ch <= 0x5a) || (0x61 <= ch && ch <= 0x7a))) {
-            valid_name_flag = false;
-            break;
+            throw invalidVarName(name);
         }
     }
-    if (valid_name_flag && !(name == "pi" || name == "e"))
+    if (!(name == "pi" || name == "e")) {
+        if (!vars.contains(name))
+            emit newVarEvent ();
         vars[name] = val;
-    else throw invalidVarName(name);
+    }
+    else throw constAssign(name);
 }
 
 const history_t& mathModel::view_history() const {
@@ -48,7 +49,6 @@ double mathModel::calculate_expression(std::string expression) {
 		Token second = queue_to_examine.front();
 		queue_to_examine.pop();
 		if (first.type == tokenType::NAME && second.value == "=") {
-			if (first.value == "pi" || first.value == "e") throw constAssign(first.value);
 			raw_tokens = queue_to_examine;
 			var_to_assign = first.value;
 		}
@@ -60,7 +60,7 @@ double mathModel::calculate_expression(std::string expression) {
     tokenq_t RPN = expr_to_RPN(raw_tokens, funs_names, var_names);
     double result = compute_RPN(RPN, funs, vars);
 	if (!var_to_assign.empty())
-		vars[var_to_assign] = result;
+        set_var(var_to_assign, result);
 
     history.push_back({expression, result});
     return result;

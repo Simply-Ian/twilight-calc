@@ -32,6 +32,7 @@ QString mathVM::stripTrailingZeroes(QString number) {
 QString mathVM::calcIt() {
     try {
         double result = model->calculate_expression(m_expression.toStdString());
+        emit calculationFinished ();
         return stripTrailingZeroes(QString::number(result, 'f'));
     }
     // unknownToken, notEnoughArgs, noOpeningPar, invalidChar

@@ -2,6 +2,7 @@
 #define CALC_MODEL_EXCEPTIONS
 #include <exception>
 
+/// @brief Означает попытку создать переменную с недопустимым именем, вроде такого: 2>куку:-)
 class invalidVarName : public std::exception {
     std::string var_name;
     public:
@@ -11,6 +12,7 @@ class invalidVarName : public std::exception {
         }
 };
 
+/// @brief Означает попытку присвоить новое значение "переменным" pi или е
 class constAssign : public std::exception {
 	std::string const_name;
     public:

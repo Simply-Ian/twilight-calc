@@ -21,8 +21,7 @@ MainWindow::MainWindow(mathVM *vm, QAbstractItemModel *fm, QAbstractItemModel *v
     QApplication::setFont (fonts["Roboto"]);
     ui->setupUi(this);
     populateKeyboard();
-    setTopPanelButtonsTransparent();
-    ui->funsButton->setFont(fonts["Georgia"]);
+//    ui->funsButton->setFont(fonts["Georgia"]);
     ui->answerLabel->adjustSize ();
     QToolTip::setFont (fonts["Tooltip"]);
     setUpAnimations();
@@ -85,15 +84,9 @@ QMap<QString, QFont> MainWindow::setUpFonts() {
     }
     ready_fonts.insert("Tooltip", ready_fonts["Roboto"]);
     ready_fonts["Tooltip"].setPointSize(16);
-    ready_fonts["Georgia"].setPointSize(16);
-    ready_fonts["Georgia"].setItalic(true);
+//    ready_fonts["Georgia"].setPointSize(16);
+//    ready_fonts["Georgia"].setItalic(true);
     return ready_fonts;
-}
-
-void MainWindow::setTopPanelButtonsTransparent(){
-    QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(ui->funsButton);
-    effect->setOpacity(0.7);
-    ui->funsButton->setGraphicsEffect (effect);
 }
 
 void MainWindow::setUpAnimations() {
@@ -115,13 +108,6 @@ void MainWindow::setUpAnimations() {
 
     QScreen* screen = QApplication::primaryScreen();
     screen_w = screen->availableSize().width();
-}
-
-void MainWindow::resizeEvent(QResizeEvent* event) {
-//    QMainWindow::resizeEvent(event);
-//    ui->historyWidget->resize (width(), ui->historyWidget->height ());
-//    ui->historyListView->resize(ui->centralwidget->width(), ((QWidget*)ui->historyListView->parent())->height());
-//    ui->funsButton->move (ui->historyWidget->x() + (ui->historyWidget->width() - ui->funsButton->width()), ui->funsButton->y());
 }
 
 QPushButton* MainWindow::newKeyboardButton (QString text, QString ch) {

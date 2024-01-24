@@ -16,3 +16,14 @@ QVariant varsModel::data(const QModelIndex &index, int role = Qt::DisplayRole) c
     }
     return QVariant();
 }
+
+void varsModel::newRow() {
+    beginInsertRows (QModelIndex(), rowCount(), rowCount());
+    newVarInserted = true;
+}
+
+void varsModel::fixNewRow() {
+    if (newVarInserted)
+        endInsertRows ();
+    newVarInserted = false;
+}

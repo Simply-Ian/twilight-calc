@@ -21,8 +21,9 @@ SOURCES += \
     src/mainwindow.cpp \
     src/mathdatamodel.cpp \
     src/mathvm.cpp \
-    src/varsmodel.cpp
-OBJECTS +=    src/mathModel/model.o \
+    src/varsmodel.cpp \
+    src/mathModel/model.cpp
+OBJECTS +=    \#src/mathModel/model.o \
     src/mathModel/expression/compute_RPN.o \
     src/mathModel/expression/expr_to_RPN.o \
     src/mathModel/expression/tokenize.o \
@@ -33,7 +34,8 @@ HEADERS += \
     src/mainwindow.h \
     src/mathdatamodel.h \
     src/mathvm.h \
-    src/varsmodel.h
+    src/varsmodel.h \
+    src/mathModel/model.h
 
 FORMS += \
     src/mainwindow.ui

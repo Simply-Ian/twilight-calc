@@ -1,20 +1,31 @@
 #ifndef CALC_MODEL
 #define CALC_MODEL
+#undef slots // Иначе импорт функций, использующих Python C API, вызовет множество ошибок сборки
 #include "mfp/mathFunProvider.h"
 #include "mfp/exceptions.h"
+#define slots
 #define STDFUN1(fun, d) {[](std::vector<double> a) -> double {return fun(a[0]);}, 1, d}
 #define STDFUN2(fun, d) {[](std::vector<double> a) -> double {return fun(a[0], a[1]);}, 2, d}
+#include <QObject>
 
 using history_t = std::vector<std::pair<std::string, double>>;
 
 /// @brief 
-class mathModel {
+class mathModel : public QObject{
+	Q_OBJECT
+private:
     mathFunProvider MFP;
+
+    /// @brief Словарь доступных переменных
     std::map<std::string, double> vars = {
         {"pi", M_PI},
         {"e", M_E}
     };
+
+    /// @brief Вектор пар "выражение-результат". Хранит предыдущие выражения, вычисленные в данном сеансе работы с программой
     history_t history;
+
+    /// @brief Словарь всех доступных математических функций и операторов
     std::map <std::string, mathFun> funs {
 		{"+", {[](std::vector<double> a) -> double {return a[0] + a[1];}, 2, ""}},
 		{"-", {[](std::vector<double> a) -> double {return a[0] - a[1];}, 2, ""}},
@@ -47,11 +58,7 @@ class mathModel {
     /// @brief Список имен математических функций.
     std::vector<std::string> funs_names;
 
-    /// @brief Структура, хранящая настройки приложения.
-    /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-//    settings sets;
-
-    public:
+public:
         /// @brief Возвращает значение заданной переменной
         /// @param name имя переменной
         /// @return численное значение переменной
@@ -78,24 +85,21 @@ class mathModel {
         /// @attention Скорее всего, в дальнейшем будет перенесено в отдельную модель
         const history_t& view_history() const;
 
-        /// @brief Позволяет просмотреть текущие настройки приложения
-        /// @returns Ссылку на экземпляр структуры, описывающей настройки
-        /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-//        const settings& get_settings() const;
-
-        /// @brief Сохраняет измененные пользователем настройки
-        /// @param new_settings Ссылка на экземпляр структуры, описывающей настройки.
-        /// @attention Скорее всего, это поле будет перенесено в отдельную модель
-//        void save_settings(const settings& new_settings);
         mathModel(std::string script_folder);
 
+        /// @returns Константную ссылку на словарь функций
 		const std::map<std::string, mathFun>& get_mathfuns_map() const {
 			return funs;
 		}
 
+        /// @returns Константную ссылку на словарь переменных
 		const std::map<std::string, double>& get_vars_map() const {
 			return vars;
 		}
+signals:
+    /// @brief Оповещает о том, что результат текущего выражения присвоен новой переменной
+    /// @details Позволяет обертке varsModel корректно обработать создание новой переменной и обновить свое View
+	void newVarEvent();
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include <exception>
 #include <string>
 
+/// @brief Означает, что пользовательская функция пытается произвести некорректную операцию
 class invalidOperation: public std::exception {
     std::string message;
 
@@ -13,10 +14,12 @@ class invalidOperation: public std::exception {
         }
 };
 
+/// @brief Означает, что пользовательская функция возвращает не double
 class badReturnType: public invalidOperation{
     public: badReturnType(std::string m) : invalidOperation(m){}
 };
 
+/// @brief Означает, что какой-то .py-модуль не получается импортировать
 class failToImport : public invalidOperation {
     public: failToImport(std::string m) : invalidOperation(m){}
 };

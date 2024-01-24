@@ -21,7 +21,7 @@ QVariant funsModel::data(const QModelIndex &index, int role = Qt::DisplayRole) c
             base_signature += QChar(0x61 + i);
             base_signature += ", ";
         }
-        base_signature += QChar(0x61 + iter->second.get_args_num());
+        base_signature += QChar(0x61 + iter->second.get_args_num() - 1);
         return base_signature + ')';
     }
     if (role == Qt::ToolTipRole) {
