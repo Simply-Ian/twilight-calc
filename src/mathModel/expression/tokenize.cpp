@@ -9,7 +9,7 @@ tokenq_t tokenize(std::string expr){
     tokenType cur_token_type = tokenType::PAR;
     // Находится ли текущий символ внутри списка аргументов некоторой функции
     bool is_in_fun = false;
-    std::string cur_token;
+    std::string cur_token = "";
     char ch;
 	/* В разных локалях разделителем целой и дробной части числа может быть "." или ",". Функция atof,
 	   которая используется в модуле compute_RPN, в зависимости от локали игнорирует один из разделителей: например,
@@ -81,8 +81,15 @@ tokenq_t tokenize(std::string expr){
 			new_token(tokenType::OPER, i - cur_token.size() - whsp_counter);
         }
         else if (ch == '-'){
-            new_token(cur_token_type == tokenType::NAME or cur_token_type == tokenType::NUM or cur_token == ")" ? 
-			          tokenType::OPER : tokenType::NUM, i - cur_token.size() - whsp_counter);
+            if (cur_token_type == tokenType::NAME or cur_token_type == tokenType::NUM or cur_token == ")")
+                new_token(tokenType::OPER, i - cur_token.size() - whsp_counter);
+            else if (cur_token == "(" || cur_token == "" || cur_token == "="){
+                // Обработка возможной ситуации вида (-f(x))
+                new_token(tokenType::OPER, i - cur_token.size() - whsp_counter);
+                result.push(Token{tokenType::NUM, "0", static_cast<int>(i - cur_token.size() - whsp_counter)});
+            }
+            else
+                new_token(tokenType::NUM, i - cur_token.size() - whsp_counter);
         }
         else if ( ch == '/' ){
             if (cur_token == "/")
