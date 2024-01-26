@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Twilight Calc
+Comment=Продвинутый калькулятор с возможностью использовать функции Python
+Exec=/usr/bin/twcalc
+Icon=/usr/share/pixmaps/twcalc_64.png
+Terminal=false

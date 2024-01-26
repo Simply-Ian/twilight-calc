@@ -17,6 +17,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 VERSION = 1.0
 DEFINES += APP_VERSION=$$VERSION
 
+TARGET=twcalc
+
 SOURCES += \
     src/funsmodel.cpp \
     src/main.cpp \
@@ -24,12 +26,16 @@ SOURCES += \
     src/mathdatamodel.cpp \
     src/mathvm.cpp \
     src/varsmodel.cpp \
-    src/mathModel/model.cpp
-OBJECTS +=    \#src/mathModel/model.o \
-    src/mathModel/expression/compute_RPN.o \
-    src/mathModel/expression/expr_to_RPN.o \
-    src/mathModel/expression/tokenize.o \
-    src/mathModel/mfp/mathFunProvider.o
+    src/mathModel/model.cpp \
+    src/mathModel/mfp/mathFunProvider.cpp \
+    src/mathModel/expression/compute_RPN.cpp \
+    src/mathModel/expression/expr_to_RPN.cpp \
+    src/mathModel/expression/tokenize.cpp \
+#OBJECTS += \
+#    src/mathModel/expression/compute_RPN.o \
+#    src/mathModel/expression/expr_to_RPN.o \
+#    src/mathModel/expression/tokenize.o \
+#    src/mathModel/mfp/mathFunProvider.o
 
 HEADERS += \
     src/funsmodel.h \
@@ -42,16 +48,13 @@ HEADERS += \
 FORMS += \
     src/mainwindow.ui
 
-TRANSLATIONS += \
-    calc_ui_ru_RU.ts
-
 # Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+#qnx: target.path = /tmp/$${TARGET}/bin
+#else: unix:!android: target.path = /opt/$${TARGET}/bin
+#!isEmpty(target.path): INSTALLS += target
 
-debug: DESTDIR=../../bin/debug
-else: DESTDIR=../../bin/release
+debug:DESTDIR=../../bin/debug
+release:DESTDIR=../../bin/release
 
 RESOURCES += \
     fonts.qrc \
@@ -64,5 +67,5 @@ QMAKE_CXXFLAGS += $(filter-out -O3, $(shell python3-config --cflags)) \
     --std=c++2a -fdiagnostics-color=always -fPIE -fpic
 QMAKE_CXX = g++-13
 
-DISTFILES += \
-    src/mathModel/makefile
+#DISTFILES += \
+#    src/mathModel/makefile

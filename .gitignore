@@ -5,8 +5,9 @@
 *.o
 model_test
 bin/*
-build/*
 .cmake
 .vscode
 *test
 Docs
+calc_ui.pro.user
+build
