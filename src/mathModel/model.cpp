@@ -20,8 +20,8 @@ double mathModel::get_var(std::string name) const {
 
 void mathModel::set_var(std::string name, double val) {
     for (char ch : name){
-        // Если символ не является латинской буквой
-        if (!((0x41 <= ch && ch <= 0x5a) || (0x61 <= ch && ch <= 0x7a))) {
+        // Если символ не является латинской буквой, цифрой или подчеркиванием
+        if (!((0x41 <= ch && ch <= 0x5a) || (0x61 <= ch && ch <= 0x7a) || (0x30 <= ch && ch <= 0x39) || (ch == 0x5f))) {
             throw invalidVarName(name);
         }
     }
