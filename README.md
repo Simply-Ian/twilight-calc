@@ -1,6 +1,6 @@
 Twilight Calc
 =
-![Скриншот 1](https://github.com/Simply-Ian/twilight-calc/blob/master/screenshots/ui_screenshot.png "Скриншот 1")
+![Скриншот 1](https://gitflic.ru/project/simply-ian/twcalc/blob/raw?file=screenshots/ui_screenshot.png "Скриншот 1")
 ![Скриншот 2](https://github.com/Simply-Ian/twilight-calc/blob/master/screenshots/ui_screenshot2.png "Скриншот 2")
 Функциональность
 -
